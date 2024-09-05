@@ -18,16 +18,16 @@ public class userController {
 
     @Autowired
     UserService userService;
-    @PostMapping ("user/register")
+    @PostMapping ("/user/register")
     public String register(@RequestBody UserDTO userDTO){
     return userService.register(userDTO);
     }
-    @GetMapping ("user/login")
+    @GetMapping ("/user/login")
     public String login(@RequestBody UserDTO userDTO){
     return userService.login(userDTO);
     }
 
-    @GetMapping ("user/getUserList")
+    @GetMapping ("/user/getUserList")
     public List<UserResponseDTO> getUserName(){
         return userService.getUserName();
     }
