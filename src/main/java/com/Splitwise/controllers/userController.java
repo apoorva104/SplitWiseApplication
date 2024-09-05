@@ -18,7 +18,7 @@ public class userController {
 
     @Autowired
     UserService userService;
-    @PostMapping ("/user/register")
+    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
     public String register(@RequestBody UserDTO userDTO){
     return userService.register(userDTO);
     }
