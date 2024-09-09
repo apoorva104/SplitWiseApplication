@@ -4,6 +4,8 @@ import com.Splitwise.dto.GrpupResponseDTO;
 import com.Splitwise.dto.UserDTO;
 import com.Splitwise.dto.UserResponseDTO;
 import com.Splitwise.entity.User;
+import com.Splitwise.exception.ExceptionMsg;
+import com.Splitwise.exception.ServiceRespVO;
 import com.Splitwise.repo.UserRepo;
 import com.Splitwise.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,14 @@ public class userController {
     @Autowired
     UserService userService;
     @RequestMapping(value = "/user/register", method = RequestMethod.POST)
-    public String register(@RequestBody UserDTO userDTO){
-    return userService.register(userDTO);
+    public ServiceRespVO register(@RequestBody UserDTO userDTO){
+        ServiceRespVO serviceRespVO=new ServiceRespVO();
+        serviceRespVO.setResponseData(userService.register(userDTO));
+        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
+        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
+        return serviceRespVO;
     }
-    @GetMapping ("/user/login")
+    @PostMapping  ("/user/login")
     public String login(@RequestBody UserDTO userDTO){
     return userService.login(userDTO);
     }

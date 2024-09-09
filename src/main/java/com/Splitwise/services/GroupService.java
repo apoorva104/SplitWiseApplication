@@ -4,9 +4,11 @@ import com.Splitwise.dto.AddMemberDTO;
 import com.Splitwise.dto.GroupDTO;
 import com.Splitwise.dto.RemoveMembersDTO;
 import com.Splitwise.entity.Group;
+import com.Splitwise.entity.GroupExpense;
 import com.Splitwise.entity.User;
 import com.Splitwise.exception.ExceptionMsg;
 import com.Splitwise.exception.SWException;
+import com.Splitwise.repo.GroupExpenseRepo;
 import com.Splitwise.repo.GroupRepo;
 import com.Splitwise.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class GroupService {
     @Autowired
      GroupRepo groupRepository;  // Assuming you have a GroupRepository
 
+    @Autowired
+    GroupExpenseRepo groupExpenseRepo;
+
     public String createGroup(GroupDTO groupDTO){
         Group group1=new Group(groupDTO);
         groupRepo.save(group1);
@@ -33,9 +38,11 @@ public class GroupService {
     }
 
     public String addMembers(AddMemberDTO addMemberDTO){
+
         //Check weather group exist or not
         Group group = groupRepository.findById(addMemberDTO.getGroupId())
-                .orElseThrow(() -> new RuntimeException("Group not found"));
+                .orElseThrow(() -> new SWException(ExceptionMsg.GROUP_NOT_FOUND_CODE,ExceptionMsg.GROUP_NOT_FOUND_MESSAGE));
+
 
         //check weather all members are valid or not
         int size=addMemberDTO.getMembersList().size();
@@ -49,6 +56,7 @@ public class GroupService {
         for(int i=0;i<size;i++){
             User user=userRepo.findById(addMemberDTO.getMembersList().get(i));
             String str=user.getGroupId();
+            //System.out.println(str);
             StringBuilder strB;
             if(str==null){
                 strB=new StringBuilder();
@@ -56,7 +64,10 @@ public class GroupService {
             else{
                 strB=new StringBuilder(str);
             }
-            if(!(str.contains(addMemberDTO.getGroupId().toString()))){
+            //System.out.println(strB+"   dvsdvdfvs");
+
+            if(strB.indexOf(addMemberDTO.getGroupId().toString()) == -1){
+                System.out.println("hello");
                 strB.append(addMemberDTO.getGroupId()+", ");
                 user.setGroupId(strB.toString());
                 userRepo.save(user);
@@ -83,6 +94,15 @@ public class GroupService {
         group.setMembers(strBui.toString());
 
         groupRepo.save(group);
+
+        //saving in group_expense table
+//        for(int i=0;i<addMemberDTO.getMembersList().size();i++){
+//            GroupExpense groupExpense=new GroupExpense();
+//            groupExpense.setGroupId(addMemberDTO.getGroupId());
+//            groupExpense.setUserId(Long.valueOf(addMemberDTO.getMembersList().get(i)));
+//            groupExpenseRepo.save(groupExpense);
+//        }
+
 
         return "Members added successfully!!!!!";
     }

@@ -24,16 +24,16 @@ public class UserService {
 
     ///register
     public String register(UserDTO userDTO){
-        Optional<User> user=userRepo.findByUserName(userDTO.getUserName());
-        Optional<User> user1=userRepo.findByEmail(userDTO.getEmail());
-        if (user.isPresent() || user1.isPresent()){
-            return "userName/Email Already Present!!!";
+        Optional<User> user = userRepo.findByUserNameOrEmail(userDTO.getUserName(), userDTO.getEmail());
+        if (user.isPresent()){
+            throw new SWException(ExceptionMsg.USER_ALREADY_PRESENT_CODE,ExceptionMsg.USER_ALREADY_PRESENT_MESSAGE);
+//            return ("User/Email Already present");
+//
         }
-        else{
-            User user2=new User(userDTO);
+           User user2=new User(userDTO);
             userRepo.save(user2);
             return "User Registered Successfully!!!!!";
-        }
+
     }
     ////login
     public String login(UserDTO userDTO){
