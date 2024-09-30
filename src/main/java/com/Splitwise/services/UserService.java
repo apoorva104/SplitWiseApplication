@@ -27,9 +27,7 @@ public class UserService {
         Optional<User> user = userRepo.findByUserNameOrEmail(userDTO.getUserName(), userDTO.getEmail());
         if (user.isPresent()){
             throw new SWException(ExceptionMsg.USER_ALREADY_PRESENT_CODE,ExceptionMsg.USER_ALREADY_PRESENT_MESSAGE);
-//            return ("User/Email Already present");
-//
-        }
+       }
            User user2=new User(userDTO);
             userRepo.save(user2);
             return "User Registered Successfully!!!!!";

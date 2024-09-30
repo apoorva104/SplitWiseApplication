@@ -1,8 +1,11 @@
 package com.Splitwise.controllers;
 
+import com.Splitwise.dto.AddExpenseDTO;
 import com.Splitwise.dto.AddMemberDTO;
 import com.Splitwise.dto.GroupDTO;
 import com.Splitwise.dto.RemoveMembersDTO;
+import com.Splitwise.exception.ExceptionMsg;
+import com.Splitwise.exception.ServiceRespVO;
 import com.Splitwise.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,4 +40,20 @@ public class groupController {
     public String removeMembers(@RequestBody RemoveMembersDTO removeMembersDTO){
         return groupService.removeMembers(removeMembersDTO);
     }
+
+    @PostMapping("/group/addExpense")
+    public ServiceRespVO addExpence(@RequestBody  AddExpenseDTO addExpenseDTO){
+
+        ServiceRespVO serviceRespVO=new ServiceRespVO();
+        serviceRespVO.setResponseData(groupService.addExpence(addExpenseDTO));
+        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
+        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
+        return serviceRespVO;
+    }
+
+//    @GetMapping("/getGroupDetails")
+//    public ServiceRespVO getGroupDetails(@RequestParam Long GroupId){
+//
+//
+//    }
 }

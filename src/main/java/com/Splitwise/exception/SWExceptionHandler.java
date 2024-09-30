@@ -5,13 +5,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+@RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class SWExceptionHandler {
 
     @ExceptionHandler(SWException.class)
-    @ResponseBody
+    //@ResponseBody
     public ServiceRespVO handleSWException(SWException ex){
         return  new ServiceRespVO(ex.getErrorCode(),ex.getErrorMessage());
     }

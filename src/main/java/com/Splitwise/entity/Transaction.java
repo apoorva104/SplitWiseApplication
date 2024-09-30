@@ -15,10 +15,13 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int transId;
     private double amount;
-    private String members;
+    private Long members;
 
     @Enumerated(EnumType.STRING)
     private TransEnum status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "expense_id", nullable = false)
+    private Expense expense;
 }
