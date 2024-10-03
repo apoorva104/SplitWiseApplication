@@ -19,26 +19,44 @@ public class groupController {
 
     //Creating new group
     @PostMapping("/group/create")
-    public String createGroup(@RequestBody GroupDTO groupDTO){
-    return groupService.createGroup(groupDTO);
+    public ServiceRespVO createGroup(@RequestBody GroupDTO groupDTO){
+        ServiceRespVO serviceRespVO=new ServiceRespVO();
+        serviceRespVO.setResponseData(groupService.createGroup(groupDTO));
+        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
+        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
+        return serviceRespVO;
+
     }
 
     //Adding members to the group
     @PostMapping("/group/addMembers")
-    public String addMembers(@RequestBody AddMemberDTO addMemberDTo){
-    return groupService.addMembers(addMemberDTo);
+    public ServiceRespVO addMembers(@RequestBody AddMemberDTO addMemberDTo){
+        ServiceRespVO serviceRespVO=new ServiceRespVO();
+        serviceRespVO.setResponseData(groupService.addMembers(addMemberDTo));
+        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
+        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
+        return serviceRespVO;
     }
 
     ///update grp name
     @PostMapping("/group/updateName")
-    public String updateGroupName(@RequestParam int id,@RequestParam String name){
-    return groupService.updateName(id,name);
+    public ServiceRespVO updateGroupName(@RequestParam int id,@RequestParam String name){
+        ServiceRespVO serviceRespVO=new ServiceRespVO();
+        serviceRespVO.setResponseData(groupService.updateName(id,name));
+        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
+        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
+        return serviceRespVO;
     }
 
     ///remove member from grp
     @PostMapping("/group/removeMembers")
-    public String removeMembers(@RequestBody RemoveMembersDTO removeMembersDTO){
-        return groupService.removeMembers(removeMembersDTO);
+    public ServiceRespVO removeMembers(@RequestBody RemoveMembersDTO removeMembersDTO){
+        ServiceRespVO serviceRespVO=new ServiceRespVO();
+        serviceRespVO.setResponseData(groupService.removeMembers(removeMembersDTO));
+        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
+        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
+        return serviceRespVO;
+
     }
 
     @PostMapping("/group/addExpense")
@@ -51,9 +69,13 @@ public class groupController {
         return serviceRespVO;
     }
 
-//    @GetMapping("/getGroupDetails")
-//    public ServiceRespVO getGroupDetails(@RequestParam Long GroupId){
-//
-//
-//    }
+    @GetMapping("/group/getGroupDetails")
+    public ServiceRespVO getGroupDetails(@RequestParam Long groupId){
+        ServiceRespVO serviceRespVO=new ServiceRespVO();
+        serviceRespVO.setResponseData(groupService.getGroupDetails(groupId));
+        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
+        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
+        return serviceRespVO;
+
+    }
 }

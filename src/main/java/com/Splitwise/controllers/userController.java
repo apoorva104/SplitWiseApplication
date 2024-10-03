@@ -20,32 +20,52 @@ public class userController {
 
     @Autowired
     UserService userService;
-    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
-    public ServiceRespVO register(@RequestBody UserDTO userDTO){
+//    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
+//    public ServiceRespVO register(@RequestBody UserDTO userDTO){
+//        ServiceRespVO serviceRespVO=new ServiceRespVO();
+//        serviceRespVO.setResponseData(userService.register(userDTO));
+//        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
+//        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
+//        return serviceRespVO;
+//    }
+//    @PostMapping  ("/user/login")
+//    public ServiceRespVO login(@RequestBody UserDTO userDTO){
+//        ServiceRespVO serviceRespVO=new ServiceRespVO();
+//        serviceRespVO.setResponseData(userService.login(userDTO));
+//        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
+//        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
+//        return serviceRespVO;
+//
+//    }
+
+    @GetMapping ("/user/getUserList")
+    public ServiceRespVO getUserName(){
         ServiceRespVO serviceRespVO=new ServiceRespVO();
-        serviceRespVO.setResponseData(userService.register(userDTO));
+        serviceRespVO.setResponseData(userService.getUserName());
         serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
         serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
         return serviceRespVO;
-    }
-    @PostMapping  ("/user/login")
-    public String login(@RequestBody UserDTO userDTO){
-    return userService.login(userDTO);
-    }
 
-    @GetMapping ("/user/getUserList")
-    public List<UserResponseDTO> getUserName(){
-        return userService.getUserName();
     }
 
     @GetMapping("/user/getUserByGroup")
-    public List<UserResponseDTO> getUserByGroup(@RequestParam(name="groupId") int groupId){
-        return userService.getUserByGroup(groupId);
+    public ServiceRespVO getUserByGroup(@RequestParam(name="groupId") int groupId){
+        ServiceRespVO serviceRespVO=new ServiceRespVO();
+        serviceRespVO.setResponseData(userService.getUserByGroup(groupId));
+        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
+        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
+        return serviceRespVO;
+
     }
 
     ///fetch all grp by members
     @GetMapping("/users/")
-    public List<GrpupResponseDTO> home(@RequestParam(name="userId") int groupId){
-        return userService.homeDetails(groupId);
+    public ServiceRespVO home(@RequestParam(name="userId") int groupId){
+        ServiceRespVO serviceRespVO=new ServiceRespVO();
+        serviceRespVO.setResponseData(userService.homeDetails(groupId));
+        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
+        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
+        return serviceRespVO;
+
     }
 }

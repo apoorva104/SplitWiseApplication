@@ -1,10 +1,7 @@
 package com.Splitwise.services;
 
 import ch.qos.logback.core.joran.sanity.Pair;
-import com.Splitwise.dto.AddExpenseDTO;
-import com.Splitwise.dto.AddMemberDTO;
-import com.Splitwise.dto.GroupDTO;
-import com.Splitwise.dto.RemoveMembersDTO;
+import com.Splitwise.dto.*;
 import com.Splitwise.entity.*;
 import com.Splitwise.entity.Expense;
 import com.Splitwise.enums.TransEnum;
@@ -330,9 +327,26 @@ public class GroupService {
     return "";
     }
 
-//    public String getGroupDetails(Long groupId){
-//
-//    }
+    public List<GroupRespDTO> getGroupDetails(Long groupId){
+        Group group=checkGroupExistence(groupId);
+        List<GroupRespDTO> list=new ArrayList<>();
+        if(group!=null){
+           List<Expense> expenses=  expenseRepo.findByGroupId(groupId);
+           for(int i=0;i<expenses.size();i++){
+               GroupRespDTO groupRespDTO=new GroupRespDTO();
+               groupRespDTO.setExpenseId(expenses.get(i).getGroupId());
+               groupRespDTO.setAmount(expenses.get(i).getAmount());
+               groupRespDTO.setExpenseName(expenses.get(i).getExpName());
+               Optional<User> user=userRepo.findById(expenses.get(i).getAddedBy());
+               user.ifPresent(value -> groupRespDTO.setAddedBy(value.getName()));
+
+               list.add(groupRespDTO);
+
+           }
+
+        }
+        return list;
+    }
 
     private Group checkGroupExistence(Long addExpenseDTO) {
       return    groupRepository.findById(addExpenseDTO)

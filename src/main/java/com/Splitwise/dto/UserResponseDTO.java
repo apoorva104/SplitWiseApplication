@@ -11,6 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UserResponseDTO {
     private Long id;
     private String userName;
+    private String jwt;
+    public UserResponseDTO(String jwt) {
+        this.jwt = jwt;
+    }
+
+
+
 
     public UserResponseDTO(Long id, String userName) {
         this.id = id;
