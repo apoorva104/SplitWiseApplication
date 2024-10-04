@@ -34,31 +34,6 @@ public class UserService {
         userRepo.save(user); // Save user to the database
     }
 
-
-    ///register
-//    public String register(UserDTO userDTO){
-//        Optional<User> user = userRepo.findByUserNameOrEmail(userDTO.getUserName(), userDTO.getEmail());
-//        if (user.isPresent()){
-//            throw new SWException(ExceptionMsg.USER_ALREADY_PRESENT_CODE,ExceptionMsg.USER_ALREADY_PRESENT_MESSAGE);
-//       }
-//            User user2=new User(userDTO);
-//            user2.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-//            userRepo.save(user2);
-//            return "User Registered Successfully!!!!!";
-//
-//
-//    }
-    ////login
-//    public String login(UserDTO userDTO){
-//        Optional<User> user=userRepo.findByUserName(userDTO.getUserName());
-//        if (user.isPresent() && userDTO.getPassword().equals(user.get().getPassword())){
-//            return "Successfully Logged In!!!";
-//        }
-//        else{
-//            return "userName/password is Invalid!!!!";
-//        }
-//    }
-
     public List<UserResponseDTO>  getUserName() {
        List<User>  user= userRepo.findAllUsernames();
        List<UserResponseDTO> list=new ArrayList<>();

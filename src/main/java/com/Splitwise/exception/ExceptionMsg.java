@@ -2,6 +2,7 @@ package com.Splitwise.exception;
 
 public class ExceptionMsg {
     public static final int SUCCESS_CODE = 0;
+    public static final int FAILURE_CODE = 500;
     public static final String SUCCESS_MESSAGE= "Success";
     public static final int USER_NOT_FOUND_CODE = 1001;
     public static final String USER_NOT_FOUND_MESSAGE= "User Not Found";

@@ -7,6 +7,7 @@ import com.Splitwise.entity.Expense;
 import com.Splitwise.enums.TransEnum;
 import com.Splitwise.exception.ExceptionMsg;
 import com.Splitwise.exception.SWException;
+import com.Splitwise.exception.ServiceRespVO;
 import com.Splitwise.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,10 +34,15 @@ public class GroupService {
     @Autowired
     UserExpenseRepo userExpenseRepo;
 
-    public String createGroup(GroupDTO groupDTO){
+    public GrpupResponseDTO createGroup(GroupDTO groupDTO){
+
         Group group1=new Group(groupDTO);
         groupRepo.save(group1);
-        return "Group created Successfully!!!!";
+
+        GrpupResponseDTO grpupResponseDTO=new GrpupResponseDTO();
+        grpupResponseDTO.setId(group1.getId());
+        grpupResponseDTO.setGroupName(group1.getGroupName());
+        return grpupResponseDTO;
     }
 
     public String addMembers(AddMemberDTO addMemberDTO){

@@ -20,24 +20,6 @@ public class userController {
 
     @Autowired
     UserService userService;
-//    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
-//    public ServiceRespVO register(@RequestBody UserDTO userDTO){
-//        ServiceRespVO serviceRespVO=new ServiceRespVO();
-//        serviceRespVO.setResponseData(userService.register(userDTO));
-//        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
-//        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
-//        return serviceRespVO;
-//    }
-//    @PostMapping  ("/user/login")
-//    public ServiceRespVO login(@RequestBody UserDTO userDTO){
-//        ServiceRespVO serviceRespVO=new ServiceRespVO();
-//        serviceRespVO.setResponseData(userService.login(userDTO));
-//        serviceRespVO.setResponseCode(ExceptionMsg.SUCCESS_CODE);
-//        serviceRespVO.setResponseMessage(ExceptionMsg.SUCCESS_MESSAGE);
-//        return serviceRespVO;
-//
-//    }
-
     @GetMapping ("/user/getUserList")
     public ServiceRespVO getUserName(){
         ServiceRespVO serviceRespVO=new ServiceRespVO();
