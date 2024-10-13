@@ -12,6 +12,15 @@ public class ExceptionMsg {
     public static final int GROUP_NOT_FOUND_CODE = 1003;
     public static final String GROUP_NOT_FOUND_MESSAGE= "Invalid Group Id";
 
+    public static final int JWT_TOKEN_NOT_FOUND_CODE = 1004;
+    public static final String JWT_TOKEN_NOT_FOUND_MESSAGE= "JWT Token is missing";
+
+    public static final int INVALID_TOKEN_CODE = 1005;
+    public static final String INVALID_TOKEN_MESSAGE= "Invalid or Expired JWT Token";
+    public static final int INVALID_GROUP_NAME_CODE = 1006;
+    public static final String INVALID_GROUP_NAME_MESSAGE= "Invalid Group Name";
+
+
 //    public static final int USER_ALREADY_PRESENT_CODE = 1004;
 //    public static final String USER_ALREADY_PRESENT_MESSAGE= "User Already present!!!!!";
 }

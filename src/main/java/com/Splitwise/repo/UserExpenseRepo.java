@@ -19,5 +19,6 @@ public interface UserExpenseRepo extends JpaRepository<UserExpense,Long> {
     @Query(value = "SELECT * FROM splitwise_user_expense u WHERE u.group_Id = :groupId AND u.lender IN :lender AND u.borrower = :borrowers",nativeQuery = true)
     List<UserExpense> findByGroupIdBorrowersAndLender(@Param("groupId") Long groupId, @Param("lender") List<Long> lender, @Param("borrowers") Long borrowers);
 
+    List<UserExpense> findByGroupId(long groupId);
 
 }

@@ -35,6 +35,9 @@ public class GroupService {
     UserExpenseRepo userExpenseRepo;
 
     public GrpupResponseDTO createGroup(GroupDTO groupDTO){
+        if(groupDTO.getGroupName().isEmpty()){
+            throw new SWException(ExceptionMsg.INVALID_GROUP_NAME_CODE,ExceptionMsg.INVALID_GROUP_NAME_MESSAGE);
+        }
 
         Group group1=new Group(groupDTO);
         groupRepo.save(group1);
@@ -61,10 +64,10 @@ public class GroupService {
             }
 
 
-         List<UserExpense>    userExpense=  userExpenseRepo.findByGroupIdAndLender(addMemberDTO.getGroupId(), Long.valueOf(addMemberDTO.getMembersList().get(i)));
-            if(!userExpense.isEmpty()){
-                throw new SWException(ExceptionMsg.USER_ALREADY_PRESENT_CODE,ExceptionMsg.USER_ALREADY_PRESENT_MESSAGE);
-            }
+//         List<UserExpense>    userExpense=  userExpenseRepo.findByGroupIdAndLender(addMemberDTO.getGroupId(), Long.valueOf(addMemberDTO.getMembersList().get(i)));
+//            if(!userExpense.isEmpty()){
+//                throw new SWException(ExceptionMsg.USER_ALREADY_PRESENT_CODE,ExceptionMsg.USER_ALREADY_PRESENT_MESSAGE);
+//            }
         }
 
         //adding lender and borrower in user_expense table
@@ -333,25 +336,44 @@ public class GroupService {
     return "";
     }
 
-    public List<GroupRespDTO> getGroupDetails(Long groupId){
+    public GroupRespDTO getGroupDetails(Long groupId){
         Group group=checkGroupExistence(groupId);
-        List<GroupRespDTO> list=new ArrayList<>();
+        GroupRespDTO groupRespDTO=new GroupRespDTO();
+
+        //setting exp details
+        List<ExpDTO> list=new ArrayList<>();
         if(group!=null){
-           List<Expense> expenses=  expenseRepo.findByGroupId(groupId);
-           for(int i=0;i<expenses.size();i++){
-               GroupRespDTO groupRespDTO=new GroupRespDTO();
-               groupRespDTO.setExpenseId(expenses.get(i).getGroupId());
-               groupRespDTO.setAmount(expenses.get(i).getAmount());
-               groupRespDTO.setExpenseName(expenses.get(i).getExpName());
-               Optional<User> user=userRepo.findById(expenses.get(i).getAddedBy());
-               user.ifPresent(value -> groupRespDTO.setAddedBy(value.getName()));
+            List<Expense> expenses=  expenseRepo.findByGroupId(groupId);
+            for(int i=0;i<expenses.size();i++){
+                ExpDTO expDTO=new ExpDTO();
+                Optional<User> user=userRepo.findById(expenses.get(i).getAddedBy());
+               user.ifPresent(value -> expDTO.setAddedBy(value.getName()));
+               expDTO.setExpenseId(expenses.get(i).getGroupId());
+                expDTO.setAmount(expenses.get(i).getAmount());
+               expDTO.setExpenseName(expenses.get(i).getExpName());
 
-               list.add(groupRespDTO);
+               list.add(expDTO);
+            }
+        }
 
-           }
+        //setting lender/borrorwer details
+
+        List<TxnDetailsDTO> TxnDetailsDTOlist=new ArrayList<>();
+        List<UserExpense> list1=userExpenseRepo.findByGroupId(groupId);
+
+        for(int i=0;i<list1.size();i++){
+            TxnDetailsDTO txnDetailsDTO=new TxnDetailsDTO();
+            txnDetailsDTO.setAmount(list1.get(i).getAmt());
+            txnDetailsDTO.setBrowwerId(list1.get(i).getBorrower());
+            txnDetailsDTO.setLenderId(list1.get(i).getLender());
+            TxnDetailsDTOlist.add(txnDetailsDTO);
 
         }
-        return list;
+
+        
+        groupRespDTO.setTxnDetails(TxnDetailsDTOlist);
+        groupRespDTO.setExpDetails(list);
+        return groupRespDTO;
     }
 
     private Group checkGroupExistence(Long addExpenseDTO) {

@@ -1,8 +1,8 @@
 package com.Splitwise.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.Splitwise.exception.ExceptionMsg;
+import com.Splitwise.exception.SWException;
+import io.jsonwebtoken.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +36,17 @@ public class JWTHelper {
     }
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        try {
+            return extractClaim(token, Claims::getSubject);
+        }
+        catch (ExpiredJwtException e) {
+            //throw new RuntimeException("JWT Token is expired");
+            throw new SWException(ExceptionMsg.JWT_TOKEN_NOT_FOUND_CODE,ExceptionMsg.JWT_TOKEN_NOT_FOUND_MESSAGE);
+        }
+        catch (JwtException e) {
+            throw new SWException(ExceptionMsg.INVALID_TOKEN_CODE,ExceptionMsg.INVALID_TOKEN_MESSAGE);
+        }
+
     }
 
     public Date extractExpiration(String token) {

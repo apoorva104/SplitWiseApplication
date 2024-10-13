@@ -11,9 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GroupRespDTO {
-    long expenseId;
-    double amount;
-    String expenseName;
-    String addedBy;
+
+    List<ExpDTO> ExpDetails;
+    List<TxnDetailsDTO> TxnDetails;
 
 }
