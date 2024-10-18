@@ -1,17 +1,15 @@
 package com.Splitwise.services;
 
-import ch.qos.logback.core.joran.sanity.Pair;
 import com.Splitwise.dto.*;
+import com.Splitwise.email.EmailService;
 import com.Splitwise.entity.*;
 import com.Splitwise.entity.Expense;
 import com.Splitwise.enums.TransEnum;
 import com.Splitwise.exception.ExceptionMsg;
 import com.Splitwise.exception.SWException;
-import com.Splitwise.exception.ServiceRespVO;
 import com.Splitwise.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 
 import java.util.*;
@@ -33,6 +31,9 @@ public class GroupService {
     TransRepo transRepo;
     @Autowired
     UserExpenseRepo userExpenseRepo;
+
+    @Autowired
+     EmailService emailService;
 
     public GrpupResponseDTO createGroup(GroupDTO groupDTO){
         if(groupDTO.getGroupName().isEmpty()){
@@ -159,7 +160,6 @@ public class GroupService {
             else{
                 strB=new StringBuilder(str);
             }
-            //System.out.println(strB+"   dvsdvdfvs");
 
             if(strB.indexOf(addMemberDTO.getGroupId().toString()) == -1){
                 System.out.println("hello");
@@ -268,72 +268,22 @@ public class GroupService {
         userExpenseRepo.saveAll(userExpenseList1);
 
 
+        //sending mail to all users
+        List<Optional<User>> userList=new ArrayList<>();
+        for(int i=0;i<addExpenseDTO.getMembers().size();i++){
+            Optional<User> user=userRepo.findById(addExpenseDTO.getMembers().get(i));
+            userList.add(user);
+        }
+        for (Optional<User> user : userList){
+            emailService.sendSimpleEmail(
+                    user.get().getEmail(),
+                    "New Expense added",
+                    "Hello " + user.get().getName() + ",\nAn expense of " + addExpenseDTO.getAmount() +
+                            " has been added to your group."
+            );
+        }
 
-        //adding in user_expense table
-//        double amt=addExpenseDTO.getAmount();
-//        double individualAmt= amt/length;
-//        List<UserExpense> userExpList=userExpenseRepo.findByGroupIdAndLender(addExpenseDTO.getGroupId(),addExpenseDTO.getAddedBy());
-//        Boolean flag=false;
-//
-//        if( !userExpList.isEmpty()){
-//
-//            for(int i=0;i<length;i++){
-//                if(addExpenseDTO.getMembers().get(i)!=addExpenseDTO.getAddedBy()){
-//                    for (UserExpense userExpense : userExpList) {
-//                        if (userExpense.getBorrower()== addExpenseDTO.getMembers().get(i)) {
-//                            userExpense.setAmt(userExpense.getAmt() + individualAmt);
-//                            userExpenseRepo.save(userExpense);
-//                            flag=true;
-//                        }
-//                    }
-//                    if(!flag){
-//                        UserExpense userExpense=new UserExpense();
-//                        UserExpense userExpense2=new UserExpense();
-//                        userExpense.setGroupId(addExpenseDTO.getGroupId());
-//                        userExpense.setLender(addExpenseDTO.getAddedBy());
-//                        userExpense.setAmt(individualAmt);
-//                        userExpense.setBorrower(addExpenseDTO.getMembers().get(i));
-//
-//                        userExpense2.setGroupId(addExpenseDTO.getGroupId());
-//                        userExpense2.setLender(addExpenseDTO.getMembers().get(i));
-//                        userExpense2.setAmt(-individualAmt);
-//                        userExpense2.setBorrower(addExpenseDTO.getAddedBy());
-//
-//                        userExpenseRepo.save(userExpense);
-//                        userExpenseRepo.save(userExpense2);
-//
-//                    }
-//
-//                }
-//            }
-//        }
-//        else{
-//            for(int i=0;i<length;i++){
-//                if(!Objects.equals(addExpenseDTO.getMembers().get(i), addExpenseDTO.getAddedBy())){
-//                    UserExpense userExpense=new UserExpense();
-//                    UserExpense userExpense2=new UserExpense();
-//                    userExpense.setGroupId(addExpenseDTO.getGroupId());
-//                    userExpense.setLender(addExpenseDTO.getAddedBy());
-//                    userExpense.setAmt(individualAmt);
-//                    userExpense.setBorrower(addExpenseDTO.getMembers().get(i));
-//
-//                    userExpense2.setGroupId(addExpenseDTO.getGroupId());
-//                    userExpense2.setLender(addExpenseDTO.getMembers().get(i));
-//                    userExpense2.setAmt(-individualAmt);
-//                    userExpense2.setBorrower(addExpenseDTO.getAddedBy());
-//
-//                    userExpenseRepo.save(userExpense);
-//                    userExpenseRepo.save(userExpense2);
-//                }
-//
-//            }
-//        }
-
-
-
-
-
-    return "";
+        return "";
     }
 
     public GroupRespDTO getGroupDetails(Long groupId){

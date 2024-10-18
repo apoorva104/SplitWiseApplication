@@ -23,12 +23,14 @@ public class User {
     private String email;
     private String password;
     private String  groupId;
+    private Long expUpdateCount;
 
     public User(UserDTO userDTO) {
         this.name=userDTO.getName();
         this.userName=userDTO.getUserName();
         this.email=userDTO.getEmail();
         this.password=userDTO.getPassword();
+        expUpdateCount= 0L;
     }
 
 }
